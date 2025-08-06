@@ -13,17 +13,17 @@ const formSchema = z.object({
     password: z.string("Senha inválida").min(8, "Senha muito curta"),
 });
 
-type FormSchema = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 const SignInForm = () => {
-    const form = useForm<FormSchema>({
+    const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
             password: "",
         },
     });
-    function onSubmit(values: FormSchema) {
+    function onSubmit(values: FormValues) {
         console.log("Formulario validado e enviado");
         console.log(values);
     }

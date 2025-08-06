@@ -1,12 +1,15 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
     name: z.string("Nome inválido").trim().min(3, "Nome muito curto"),
@@ -20,10 +23,11 @@ const formSchema = z.object({
     path: ["passwordConfirmation"],
 });
 
-type FormSchema = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 const SignUpForm = () => {
-    const form = useForm<FormSchema>({
+    const router = useRouter();
+    const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
@@ -32,9 +36,26 @@ const SignUpForm = () => {
             passwordConfirmation: "",
         },
     });
-    function onSubmit(values: FormSchema) {
-        console.log("Formulario validado e enviado");
-        console.log(values);
+    async function onSubmit(values: FormValues) {
+        await authClient.signUp.email({
+            name: values.name,
+            email: values.email,
+            password: values.password,
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push("/");
+                },
+                onError: (error) => {
+                    if (error.error.code === "USER_ALREADY_EXISTS") {
+                        toast.error("E-mail já cadastrado.");
+                        return form.setError("email", {
+                            message: "E-mail já cadastrado.",
+                        });
+                    }
+                    toast.error(error.error.message);
+                },
+            },
+        });
     }
     return (
         <>
