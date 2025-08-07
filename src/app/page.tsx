@@ -1,12 +1,22 @@
+import { desc } from "drizzle-orm";
 import Image from "next/image";
 
 import CategorySelector from "@/components/common/category-selector";
+import Footer from "@/components/common/footer";
 import { Header } from "@/components/common/header";
 import ProductList from "@/components/common/product-list";
 import { db } from "@/db";
+import { productTable } from "@/db/schema";
 
 const Home = async () => {
   const products = await db.query.productTable.findMany({
+    with: {
+      variants: true,
+    },
+  });
+  const newlyCreatedProducts = await db.query.productTable.findMany({
+    orderBy: [desc(productTable.createdAt)],
+    limit: 4,
     with: {
       variants: true,
     },
@@ -29,6 +39,8 @@ const Home = async () => {
           <Image src="/banner-02.png" alt="Seja autêntico" width={0} height={0} sizes="100vw" className="w-full h-auto rounded-lg" />
 
         </div>
+        <ProductList title="Novos produtos" products={newlyCreatedProducts} />
+        <Footer />
       </div>
     </>
   );
