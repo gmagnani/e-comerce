@@ -16,7 +16,7 @@ const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
     const firstVariant = product.variants[0];
 
     return (
-        <Link href="/" className="flex flex-col gap-4">
+        <Link href={`/product-variant/${firstVariant.slug}`} className="flex flex-col gap-4">
             <Image src={firstVariant.imageUrl} alt={product.name} sizes="100vw" width={0} height={0} className="rounded-3xl h-auto w-full" />
             <div className={cn("flex flex-col gap-1 max-w-[200px]", textContainerClassName)}>
                 <p className="truncate text-sm font-medium">{product.name}</p>
