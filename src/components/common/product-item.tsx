@@ -3,20 +3,22 @@ import Link from "next/link";
 
 import { productTable, productVariantTable } from "@/db/schema";
 import { formatCentsToBRL } from "@/helpers/money";
+import { cn } from "@/lib/utils";
 
 interface ProductItemProps {
     product: typeof productTable.$inferSelect & {
         variants: (typeof productVariantTable.$inferSelect)[];
     };
+    textContainerClassName?: string;
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
     const firstVariant = product.variants[0];
 
     return (
         <Link href="/" className="flex flex-col gap-4">
-            <Image src={firstVariant.imageUrl} alt={product.name} width={200} height={200} className="rounded-3xl" />
-            <div className="flex flex-col gap-1 max-w-[200px]">
+            <Image src={firstVariant.imageUrl} alt={product.name} sizes="100vw" width={0} height={0} className="rounded-3xl h-auto w-full" />
+            <div className={cn("flex flex-col gap-1 max-w-[200px]", textContainerClassName)}>
                 <p className="truncate text-sm font-medium">{product.name}</p>
                 <p className="text-muted-foreground truncate text-xs font-medium">{product.description}</p>
                 <p className="tuncate text-sm font-semibold">{formatCentsToBRL(firstVariant.priceInCents)}</p>
