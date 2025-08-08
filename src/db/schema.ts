@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const userTable = pgTable("user", {
   id: text("id").primaryKey(),
@@ -16,6 +23,10 @@ export const userTable = pgTable("user", {
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+export const userRelations = relations(userTable, ({ many }) => ({
+  shippingAddressRelations: many(shippingAddressTable),
+}));
 
 export const sessionTable = pgTable("session", {
   id: text("id").primaryKey(),
@@ -68,8 +79,8 @@ export const categoryTable = pgTable("category", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const categoryRelations = relations(categoryTable, ({many}) => ({
-    products: many(productTable)
+export const categoryRelations = relations(categoryTable, ({ many }) => ({
+  products: many(productTable),
 }));
 
 export const productTable = pgTable("product", {
@@ -106,10 +117,43 @@ export const productVariantTable = pgTable("product_variant", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const productVariantRelations = relations(productVariantTable, ({one}) => ({
+export const productVariantRelations = relations(
+  productVariantTable,
+  ({ one }) => ({
     product: one(productTable, {
-        fields: [productVariantTable.productId],
-        references: [productTable.id],
-    })
-}));
+      fields: [productVariantTable.productId],
+      references: [productTable.id],
+    }),
+  }),
+);
 
+export const shippingAddressTable = pgTable("shipping_address", {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => userTable.id, { onDelete: "cascade" }),
+  recipientName: text("recipient_name").notNull(),
+  street: text().notNull(),
+  number: text().notNull(),
+  complement: text(),
+  neighborhood: text().notNull(),
+  city: text().notNull(),
+  state: text().notNull(),
+  zipCode: text("zip_code").notNull(),
+  country: text().notNull(),
+  phone: text().notNull(),
+  email: text().notNull(),
+  cpfOrCnpj: text("cpf_or_cnpj").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const shippingAddressRelations = relations(
+  shippingAddressTable,
+  ({ one }) => ({
+    user: one(userTable, {
+      fields: [shippingAddressTable.userId],
+      references: [userTable.id],
+    }),
+  }),
+);
