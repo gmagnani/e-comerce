@@ -9,6 +9,7 @@ import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
+import Cart from "./cart";
 
 
 export const Header = () => {
@@ -23,7 +24,9 @@ export const Header = () => {
                 width={100}
             /></Link>
 
-            <div className="flex items-center">
+            <div className="flex items-center gap-3">
+                <Cart />
+
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="outline" size="icon">
@@ -52,26 +55,26 @@ export const Header = () => {
                                             </div>
                                         </div>
                                         <Button variant="outline" size={"icon"} onClick={() => authClient.signOut()}>
-                                        <LogOutIcon />
-                                    </Button>
-                                </div>
-                        </>
-                        ) : (
-                        <>
-                            <div className="flex items-center justify-between">
-                                <h2 className="font-semibold">Olá. Faça seu login!</h2>
-                                <Button size="icon" variant="outline" asChild>
-                                    <Link href="/authentication">
-                                        <LogInIcon />
-                                    </Link>
-                                </Button>
-                            </div>
-                        </>
+                                            <LogOutIcon />
+                                        </Button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex items-center justify-between">
+                                        <h2 className="font-semibold">Olá. Faça seu login!</h2>
+                                        <Button size="icon" variant="outline" asChild>
+                                            <Link href="/authentication">
+                                                <LogInIcon />
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </>
                             )}
-                    </div>
-                </SheetContent>
-            </Sheet>
-        </div>
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
         </header >
     );
 }
