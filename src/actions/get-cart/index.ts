@@ -32,7 +32,6 @@ export const getCart = async () => {
       .insert(cartTable)
       .values({
         userId: session.user.id,
-        shippingAddressId: "",
       })
       .returning();
     return {...newCart, items: []};

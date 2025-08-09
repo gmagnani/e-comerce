@@ -39,7 +39,6 @@ export const addProductToCart = async (data: AddProductToCartSchema) => {
       .insert(cartTable)
       .values({
         userId: session.user.id,
-        shippingAddressId: "",
       })
       .returning();
     cartId = newCart.id;
