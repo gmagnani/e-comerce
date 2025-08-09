@@ -14,7 +14,7 @@ interface CartItemProps {
     quantity: number;
 }
 
-const CartItem = ({ id, productName, productVariantName, productVariantImageUrl, productVariantPriceInCents, quantity }: CartItemProps) => {
+const CartItem = ({ productName, productVariantName, productVariantImageUrl, productVariantPriceInCents, quantity }: CartItemProps) => {
     return (
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
