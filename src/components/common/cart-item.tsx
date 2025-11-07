@@ -3,6 +3,7 @@ import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
+import { addProductToCart } from "@/actions/add-cart-product";
 import { decreaseCartProductQuantity } from "@/actions/decrease-cart-product-quantity";
 import { removeCartProducts } from "@/actions/remove-cart-products";
 import { formatCentsToBRL } from "@/helpers/money";
@@ -11,6 +12,7 @@ import { Button } from "../ui/button";
 
 interface CartItemProps {
     id: string;
+    productVariantId: string;
     productName: string;
     productVariantName: string;
     productVariantImageUrl: string;
@@ -18,7 +20,7 @@ interface CartItemProps {
     quantity: number;
 }
 
-const CartItem = ({ id, productName, productVariantName, productVariantImageUrl, productVariantPriceInCents, quantity }: CartItemProps) => {
+const CartItem = ({ id, productVariantId, productName, productVariantName, productVariantImageUrl, productVariantPriceInCents, quantity }: CartItemProps) => {
     const queryClient = useQueryClient();
     const removeProductFromCartMutation = useMutation({
         mutationKey: ["remove-cart-products"],
@@ -41,6 +43,23 @@ const CartItem = ({ id, productName, productVariantName, productVariantImageUrl,
             },
             onError: () => {
                 toast.error("Erro ao diminuir quantidade do produto");
+            }
+        });
+    };
+    const increaseCartProductQuantityMutation = useMutation({
+        mutationKey: ["increase-cart-product-quantity"],
+        mutationFn: () => addProductToCart({ productVariantId, quantity: 1 }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+        }
+    });
+    const handleIncrementCartProductQuantityClick = () => {
+        increaseCartProductQuantityMutation.mutate(undefined, {
+            onSuccess: () => {
+                toast.success("Quantidade do produto aumentada");
+            },
+            onError: () => {
+                toast.error("Erro ao aumentar quantidade do produto");
             }
         });
     };
@@ -67,7 +86,7 @@ const CartItem = ({ id, productName, productVariantName, productVariantImageUrl,
                         </Button>
                         <p className="font-semibold text-xs">{quantity}</p>
 
-                        <Button className="h-4 w-4" variant="ghost" onClick={() => { }}>
+                        <Button className="h-4 w-4" variant="ghost" onClick={handleIncrementCartProductQuantityClick}>
                             <PlusIcon />
                         </Button>
                     </div>
