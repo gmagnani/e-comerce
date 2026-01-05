@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 E-commerce Fullstack Moderno
 
-## Getting Started
+Este é um projeto de e-commerce de alto desempenho, desenvolvido com as tecnologias mais recentes do ecossistema React e Next.js. O foco principal foi a criação de uma plataforma escalável, segura e com uma experiência de utilizador fluida, integrando gestão complexa de estados, persistência de dados e pagamentos reais.
 
-First, run the development server:
+## 🚀 Tecnologias e Ferramentas
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* **Framework:** [Next.js 15](https://nextjs.org/) (App Router).
+* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) para robustez e segurança de tipos.
+* **Estilização:** [Tailwind CSS 4](https://tailwindcss.com/) para um design moderno e responsivo.
+* **Base de Dados & ORM:** [PostgreSQL](https://www.postgresql.org/) com [Drizzle ORM](https://orm.drizzle.team/) para consultas eficientes e seguras.
+* **Autenticação:** [Better Auth](https://www.better-auth.com/) para gestão completa de sessões, utilizadores e contas vinculadas.
+* **Pagamentos:** Integração com [Stripe](https://stripe.com/) para processamento de checkout seguro.
+* **Gestão de Estado & Cache:** [TanStack React Query](https://tanstack.com/query/latest) para sincronização de dados do servidor.
+* **Componentes UI:** [Radix UI](https://www.radix-ui.com/) para acessibilidade e [Lucide React](https://lucide.dev/) para iconografia.
+* **Formulários:** [React Hook Form](https://react-hook-form.com/) com validação via [Zod](https://zod.dev/).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Funcionalidades Principais
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Catálogo de Produtos Dinâmico:** Gestão de categorias e suporte a variantes de produtos (cores, imagens e preços específicos por variante).
+* **Carrinho de Compras Persistente:** Sistema de carrinho vinculado ao utilizador na base de dados, permitindo a recuperação de itens entre dispositivos.
+* **Gestão de Endereços:** Suporte para múltiplos endereços de entrega por utilizador.
+* **Fluxo de Checkout Completo:** Integração nativa com o Stripe para pagamentos e criação automática de pedidos.
+* **Rastreamento de Pedidos:** Histórico de compras com estados de pagamento (Pendente, Pago, Cancelado).
+* **Segurança Avançada:** Autenticação robusta, proteção de rotas e validação de esquemas em todas as entradas de dados.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Arquitetura da Base de Dados
 
-## Learn More
+A base de dados foi desenhada para suportar operações complexas de retalho, incluindo:
+* **Utilizadores e Autenticação:** Tabelas `user`, `session`, `account` e `verification`.
+* **Produtos e Inventário:** Estrutura relacional entre `category`, `product` e `product_variant`.
+* **Vendas:** Relacionamentos entre `cart`, `cart_item`, `order` e `order_item`.
 
-To learn more about Next.js, take a look at the following resources:
+## 🏁 Como Executar o Projeto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **Clone o repositório:**
+    ```bash
+    git clone [URL_DO_TEU_REPOSITORIO]
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-## Deploy on Vercel
+3.  **Configuração de Ambiente:**
+    Crie um ficheiro `.env` na raiz e configure as variáveis para o PostgreSQL (DATABASE_URL) e as chaves do Stripe.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4.  **Migrações do Banco de Dados:**
+    ```bash
+    npx drizzle-kit push
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
+
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
